@@ -1,20 +1,5 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
-  background-color: #282c34;
+  background: linear-gradient(135deg,#a8edea,#fed6e3);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,15 +9,24 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.frosted-glass {
+  background-color: rgb( 255, 255, 255, 0.4);
+
+  display: flex;
+  flex-direction: column;
+
+  backdrop-filter: blur(5px);
+  border-radius: 10px;
+  box-shadow: -10px 5px 10px 0px rgb(30 30 30 / 25%);
+
+  height: 75vh;
+  width: 80vw;
+  max-width: 750px;
+
+  margin: auto;
+  padding: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.community-name {
+  font-weight: bold;
 }

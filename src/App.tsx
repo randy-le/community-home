@@ -27,14 +27,27 @@ function App() {
     const fetchData = async () => {
       try {
         // fetch communities
-        const comsResp = await fetch( 'https://storage.googleapis.com/openhouse-ai-fe-coding-test/communities.json' );
-        const comsResult = await comsResp.json();
-        setCommunities( comsResult );
+        const commsResp = await fetch( 'https://storage.googleapis.com/openhouse-ai-fe-coding-test/communities.json' );
+        const commsData = await commsResp.json();
+
+        // light validation on communities api
+        if ( commsData && typeof commsData === 'object' ) {
+          setCommunities( commsData );
+
+        } else {
+          throw new Error('Invalid data format');
+        }
 
         // fetch homes from the proxy server
         const homesResp = await fetch( 'https://storage.googleapis.com/openhouse-ai-fe-coding-test/homes.json' );
-        const homesResult = await homesResp.json();
-        setHomes( homesResult );
+        const homesData = await homesResp.json();
+
+        // light validation on homes api
+        if ( homesData && typeof homesData === 'object' ) {
+          setHomes( homesData );
+        }
+
+        setHomes( homesData );
       } catch ( error ) {
         console.error ( `Error fetching data: `, error );
       } finally {
@@ -48,9 +61,12 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        { loading ? null : 
-          <CommunitiesHomes communities={ communities } homes={ homes }/>
-        }
+      { loading ? null : 
+          <>
+            <h1 style={ { textShadow: 'black -2px 2px 0px' } }>Communities</h1>
+            <CommunitiesHomes communities={ communities } homes={ homes }/>
+          </>
+      }
       </header>
     </div>
   );

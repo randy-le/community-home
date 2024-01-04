@@ -26,7 +26,9 @@ interface CommunitiesAndHomes {
 }
 
 const CommunitiesHomes = ( props: Props ) => {
+
     function createData(
+        id: string,
         imageUrl: string,
         name: string,
         group: string,
@@ -35,6 +37,7 @@ const CommunitiesHomes = ( props: Props ) => {
         homes: Home[] = [],
     ) {
         return {
+            id,
             imageUrl,
             name,
             group,
@@ -51,12 +54,13 @@ const CommunitiesHomes = ( props: Props ) => {
 
       function Row(props: { row: ReturnType<typeof createData> }) {
         const { row } = props;
-        const [open, setOpen] = useState(false);
+        const [ open, setOpen ] = useState( false );
       
         return (
           <>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-              <TableCell size='small'> { /** Collapse Button */}
+              { /** Collapse Button */}
+              <TableCell size='small'> 
               { row.homes.length ? 
                 <IconButton
                   aria-label="expand row"
@@ -67,7 +71,8 @@ const CommunitiesHomes = ( props: Props ) => {
                 </IconButton> : null
               }
               </TableCell>
-              <TableCell align="center" style={ { display: `flex`, flexDirection: `column`, alignItems: `center` } } component="th" scope="row"> { /* Name and Image */}
+              { /* Name and Image */}
+              <TableCell align="center" style={ { display: `flex`, flexDirection: `column`, alignItems: `center` } } component="th" scope="row"> 
                 <div className={ `community-name` }>{row.name}</div>
                 <a href={ `http://maps.google.com/?q=Calgary ${ row.name }` } target={ `_blank` }>
                     <img 
@@ -77,7 +82,9 @@ const CommunitiesHomes = ( props: Props ) => {
                     />
                 </a>
               </TableCell>
+              { /* Group */}
               <TableCell align="center">{row.group}</TableCell>
+              { /* Average Price */}
               <TableCell align="center">
                 {   
                     row.averagePrice ?
@@ -85,6 +92,7 @@ const CommunitiesHomes = ( props: Props ) => {
                             null
                 }
               </TableCell>
+              { /* Lowest Price */}
               <TableCell align="center">
                 {   
                     row.lowestPrice !== Infinity ? 
@@ -103,6 +111,7 @@ const CommunitiesHomes = ( props: Props ) => {
                     <Table size="small" aria-label="purchases">
                       <TableHead>
                         <TableRow>
+                          { /* Collapsed Headers: Type, Area, Price */}
                           <TableCell>Type</TableCell>
                           <TableCell align="right">Area (sqft)</TableCell>
                           <TableCell align="right">Price</TableCell>
@@ -128,11 +137,13 @@ const CommunitiesHomes = ( props: Props ) => {
         );
       } 
     
-      
+      /**
+       * helper function to provide rows for the table to process
+       * calculates average price and lowest price as well
+       */
       const createRows = ( communities: Community[], homes: Home[] ) => {
         const communitiesAndHomes = combineCommunitiesAndHomes( communities, homes );
 
-        // createData( imageUrl, name, group, average price )
         const rows = communitiesAndHomes.map( ( communityAndHomes ) => {
             // calculate the average price
             const averagePrice = communityAndHomes.homes.reduce( ( totalPrice, home ) => {
@@ -141,10 +152,11 @@ const CommunitiesHomes = ( props: Props ) => {
             
             const lowestPrice = communityAndHomes.homes.reduce( ( lowestPrice, home ) => {
                 return home.price < lowestPrice ? home.price : lowestPrice;
-            }, Infinity ) / communityAndHomes.homes.length;
+            }, Infinity );
 
             // process rows
             return createData( 
+                communityAndHomes.community.id,
                 communityAndHomes.community.imgUrl, 
                 communityAndHomes.community.name, 
                 communityAndHomes.community.group, 
@@ -157,6 +169,10 @@ const CommunitiesHomes = ( props: Props ) => {
         return rows;
       };
 
+      /**
+       * helper function to combine the communities and home objects
+       * sorts both and then groups the in their respective communities
+       */
       function combineCommunitiesAndHomes ( communities: Community[], homes: Home[] ) {
         // sort communities by name first
         const sortedCommunities = communities.sort( ( a, b ) => a.name.localeCompare( b.name ) );
@@ -181,8 +197,9 @@ const CommunitiesHomes = ( props: Props ) => {
         return (
           <TableContainer component={ Paper }>
             <Table stickyHeader aria-label="collapsible table">
-              <TableHead>
+              <TableHead style={ { backgroundColor: 'grey' } }>
                 <TableRow>
+                  { /* Column Headers: Name, Group, Average Price, Lowest Price */ }
                   <TableCell />
                   <TableCell align="center">Name</TableCell>
                   <TableCell align="center">Group</TableCell>
@@ -192,7 +209,7 @@ const CommunitiesHomes = ( props: Props ) => {
               </TableHead>
               <TableBody>
                 { createRows( props.communities, props.homes ).map( ( row ) => (
-                  <Row key={ Math.random() } row={ row } />
+                  <Row key={ row.id } row={ row } />
                 ) ) }
               </TableBody>
             </Table>

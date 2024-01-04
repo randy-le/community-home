@@ -59,21 +59,11 @@ const CommunitiesHomes = ( props: Props ) => {
         return (
           <>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-              { /** Collapse Button */}
-              <TableCell size='small'> 
-              { row.homes.length ? 
-                <IconButton
-                  aria-label="expand row"
-                  size="small"
-                  onClick={() => setOpen(!open)}
-                >
-                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </IconButton> : null
-              }
-              </TableCell>
               { /* Name and Image */}
               <TableCell align="center" style={ { display: `flex`, flexDirection: `column`, alignItems: `center` } } component="th" scope="row"> 
-                <div className={ `community-name` }>{row.name}</div>
+                <Typography variant="h6" gutterBottom component="div">
+                    { row.name }
+                </Typography>
                 <a href={ `http://maps.google.com/?q=Calgary ${ row.name }` } target={ `_blank` }>
                     <img 
                         style={ { width: '125px', height: '125px', objectFit: 'cover', borderRadius: '10px' } } 
@@ -100,12 +90,24 @@ const CommunitiesHomes = ( props: Props ) => {
                             null
                 }
               </TableCell>
+              { /** Collapse Button */}
+              <TableCell size='small' align='center'> 
+              { row.homes.length ? 
+                <IconButton
+                  aria-label="expand row"
+                  size="small"
+                  onClick={() => setOpen(!open)}
+                >
+                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton> : null
+              }
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                 <Collapse in={open} timeout="auto" unmountOnExit>
                   <Box sx={{ margin: 1 }}>
-                    <Typography variant="h6" gutterBottom component="div">
+                    <Typography variant="subtitle1" fontWeight={"bold"} gutterBottom component="div">
                       Homes
                     </Typography>
                     <Table size="small" aria-label="purchases">
@@ -200,11 +202,11 @@ const CommunitiesHomes = ( props: Props ) => {
               <TableHead style={ { backgroundColor: 'grey' } }>
                 <TableRow>
                   { /* Column Headers: Name, Group, Average Price, Lowest Price */ }
-                  <TableCell />
                   <TableCell align="center">Name</TableCell>
                   <TableCell align="center">Group</TableCell>
                   <TableCell align="center">Average Price</TableCell>
                   <TableCell align="center">Lowest Price</TableCell>
+                  <TableCell align="center">Homes</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
